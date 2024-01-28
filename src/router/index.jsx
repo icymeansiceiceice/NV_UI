@@ -1,27 +1,47 @@
 import App from '../App.jsx'
-import Login from '../component/Login.jsx'
+import Login from '../component/Auth/Login.jsx'
 import {
     createBrowserRouter,
   } from "react-router-dom";
-import CreateUser from '../component/createUser.jsx';
-import UserDetail from '../component/UserDetail.jsx';
+import CreateUser from '../component/User/CreateUser.jsx';
+import UserDetail from '../component/User/UserDetail.jsx';
+import UserList from '../component/User/UserList.jsx';
+import DepartmentList from '../component/Department/DepartmentList.jsx';
+import CreateDepartment from '../component/Department/createDepartment.jsx';
+import DepartmentDetail from '../component/Department/DepartmentDetail.jsx';
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Login/>,
+      element: <Login/>
     },
     {
       path: "/home",
-      element: <App/>,
+      element: <App/>
     },
     {
       path: "/createUser",
-      element: <CreateUser/>,
+      element: <CreateUser/>
     },
     {
-      path: "/userDetail",
-      element: <UserDetail/>,
+      path: "/userDetail/:id",
+      element: <UserDetail/>
+    },
+    {
+      path: "/userList",
+      element: <UserList/>
+    },
+    {
+      path: "/departmentList",
+      element: <DepartmentList/>
+    },
+    {
+      path: "/createDepartment",
+      element: <CreateDepartment/>
+    },
+    {
+      path: "/departmentDetail/:id",
+      element: <DepartmentDetail/>
     }
   ]);
 

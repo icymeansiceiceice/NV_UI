@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react"
-import UserService from "../services/UserService";
+import UserService from "../../services/UserService";
 import { useNavigate } from 'react-router-dom';
 
-export default function UserDetail() {
-    let navigator = useNavigate();
-    const authUser = JSON.parse(localStorage.getItem('authenticatedUser'));
+export default function CreateUser(){
 
-    const [errorMessage,setErrorMessage] = useState({});
-    const [isValid,setIsValid] = useState(false);
+    let navigator = useNavigate();
     const [user,setUser] = useState({
         userID:'',
         name:'',
@@ -17,25 +14,9 @@ export default function UserDetail() {
         delete: false
     });
 
-    useEffect(()=>{    
-        UserService.getUserById(authUser.id)
-            .then(res => {
-                setUser(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-
-        if(Object.keys(errorMessage).length === 0 && isValid){
-            UserService.updateUser(user)
-            .then(res => {
-                navigator('/home');
-            })
-            .catch(err => {
-                console.log(err);
-            });
-        }
-    },[errorMessage]);
+    useEffect(()=>{
+        
+    },[])
 
     const handleChange = (e)=>{
         const value = e.target.value;
@@ -44,29 +25,14 @@ export default function UserDetail() {
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        setErrorMessage(validate(user));  
-        setIsValid(true);
-        
-    }
-
-    const validate = (values)=>{
-        const errors = {};
-        if (!values.userID) {
-          errors.userID = "UserID is required!";
-        }
-        if (!values.name) {
-            errors.name = "Username is required!";
-        }
-        if (!values.email) {
-            errors.email = "Email is required!";
-        }
-        if (!values.phone) {
-            errors.phone = "Phone number is required!";
-        }
-        if (!values.password) {
-            errors.password = "Password is required!";
-        }
-        return errors;
+        UserService.createUser(user)
+            .then(res=>{
+                console.log(res)
+                navigator('/home');
+            })
+            .catch(err=>{
+                console.log(err);
+            });
     }
 
     const clear = (e)=>{
@@ -76,41 +42,38 @@ export default function UserDetail() {
             name:'',
             email:'',
             phone:'',
-            password:''
+            password:'',
+            department:{
+                id:''
+            }
         })
         setErrorMessage({});
         setIsValid(false);
     }
 
-
     return(
           <div>
             <form action="" onSubmit={handleSubmit}>
                <div>
-                    <h1>Update User</h1>
+                    <h1>Create User</h1>
                 </div>
                 <div>
-                    {errorMessage.userID && <p style={{color:'red'}}>{errorMessage.userID}</p>}
                     <label htmlFor="">userID</label>
                     <input type="text" name="userID" value={user.userID} onChange={(e)=> handleChange(e)} />
                 </div> 
                 <div>
-                    {errorMessage.name && <p style={{color:'red'}}>{errorMessage.name}</p>}
                     <label htmlFor="">name</label>
                     <input type="text" name="name" value={user.name} onChange={(e)=> handleChange(e)} />
                 </div>
                 <div>
-                    {errorMessage.email && <p style={{color:'red'}}>{errorMessage.email}</p>}
                     <label htmlFor="">email</label>
                     <input type="email" name="email" value={user.email} onChange={(e)=> handleChange(e)} />
                 </div>
                 <div>
-                    {errorMessage.phone && <p style={{color:'red'}}>{errorMessage.phone}</p>}
                     <label htmlFor="">phone</label>
                     <input type="text" name="phone" value={user.phone} onChange={(e)=> handleChange(e)} />
                 </div>
                 <div>
-                    {errorMessage.password && <p style={{color:'red'}}>{errorMessage.password}</p>}
                     <label htmlFor="">password</label>
                     <input type="password" name="password" value={user.password} onChange={(e)=> handleChange(e)} />
                 </div>

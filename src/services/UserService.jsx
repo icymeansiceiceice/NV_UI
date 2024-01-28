@@ -16,6 +16,10 @@ class UserService{
     getUserById = (id)=>{
         return axios.get(User_API_URL+'/getUser/'+id);
     }
+
+    getUsers = ()=>{
+        return axios.get(User_API_URL+'/getAllUser');
+    }
 }
 
 export default new UserService();

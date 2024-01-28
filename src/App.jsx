@@ -5,25 +5,24 @@ function App() {
   return (
     
       <div>
-        <div>
 
-        <Link to='/userDetail'>
-          <button>
-           profile
-          </button>
-        </Link>
-        </div>
+
+
         <div>
-          <Link to='/updateUser'>
+          <Link to='/departmentList'>
             <button>
-              department
+              Department
             </button>
         </Link>
         </div>
+
+
+
+
         <div>
-          <Link to='/updateUser'>
+          <Link to='/userList'>
             <button>
-              usersList
+              UsersList
             </button>
         </Link>
         </div>
