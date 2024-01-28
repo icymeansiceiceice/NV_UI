@@ -20,6 +20,11 @@ class DepartmeentService{
     getDepartments = ()=>{
         return axios.get(Department_API_URL+'/getAllDepartment');
     }
+
+    addUser = (user)=>{
+        return axios.post(Department_API_URL+'/addUser',user);
+    }
+
 }
 
 export default new DepartmeentService();

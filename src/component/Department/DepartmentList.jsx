@@ -36,7 +36,7 @@ export default function DepartmentList() {
                 <button>Create Department</button>
             </Link>
         </div>
-        <h1>User List</h1>
+        <h1>Department List</h1>
             <table>
                 <thead>
                 <tr>

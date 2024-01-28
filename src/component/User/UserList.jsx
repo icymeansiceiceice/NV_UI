@@ -9,7 +9,6 @@ export default function UserList() {
     useEffect(()=>{
         UserService.getUsers()
             .then(res=>{
-                console.log(res.data);
                 setUsers(res.data);
             })
             .catch(err =>{
@@ -43,7 +42,7 @@ export default function UserList() {
                                 <td>{data.name}</td>
                                 <td>{data.email}</td>
                                 <td>{data.phone}</td>
-                                <td>{data.department.name}</td>
+                                {data.department!==null && <td>{data.department.name}</td>}
                                 <td>
                                 <Link to={`/userDetail/${data.id}`}><button>Edit</button></Link>
                                 <Link to={``}><button>Delete</button></Link>

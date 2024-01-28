@@ -11,7 +11,8 @@ export default function CreateUser(){
         email:'',
         phone:'',
         password:'',
-        delete: false
+        delete: false,
+        department:''
     });
 
     useEffect(()=>{
@@ -76,6 +77,10 @@ export default function CreateUser(){
                 <div>
                     <label htmlFor="">password</label>
                     <input type="password" name="password" value={user.password} onChange={(e)=> handleChange(e)} />
+                </div>
+                <div>
+                    <label htmlFor="">department</label>
+                    <input type="password" name="department" value={user.department} onChange={(e)=> handleChange(e)} />
                 </div>
                 <div>
                     <button >save</button>
