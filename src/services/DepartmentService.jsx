@@ -25,8 +25,7 @@ class DepartmentService {
         return axios.post(Department_API_URL + '/addUser', user);
     }
     removeDepartment = (id) => {
-        console.log(id)
-        return axios.delete(Department_API_URL + '/delete/', id);
+        return axios.delete(Department_API_URL + `/delete/${id}`);
     }
 
 }

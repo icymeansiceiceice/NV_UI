@@ -1,38 +1,41 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import {
-  UserOutlined,
-} from '@ant-design/icons';
 import { Card, Layout, theme, Avatar, Button, Col, Row, Modal, Form, Input, Select, Space, Typography } from 'antd';
 import './link.css';
 import { NavLink } from 'react-router-dom';
-import UserService from './services/UserService';
-import DepartmentService from './services/DepartmentService';
+import UserService from '../services/UserService';
+import DepartmentService from '../services/DepartmentService';
 import { Tag } from 'antd';
-import UserList from './UserList';
 const { Header, Content, Footer, Sider } = Layout;
 
 
-const App = () => {
+
+const Home = () => {
+  // department
   const [departments, setDepartments] = useState([]);
-  const [EditDep, setEditDep] = useState([])
+  const [EditDep, setEditDep] = useState({})
   const [departmentName, setdepartmentName] = useState({
     name: '',
     delete: false
   })
+  // user
   const [loginUser, setloginUser] = useState({});
+  const [editUsers, setEditUsers] = useState([]);
+  const [allUser, setAlluser] = useState({});
   const [users, setusers] = useState([{
     label: '',
     value: '',
   }]);
-  const [departmentEdit, setDepartmentEdit] = useState({
-    departmentName: "",
-    users: []
-  })
+
+  // modal box and collapsed
   const [collapsed, setCollapsed] = useState(false);
+  //open model box
   const [open, setOpen] = useState(false);
+  //open edit model box
   const [editOpen, setEditOpen] = useState(false);
+  //loading
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModal = () => {
@@ -40,19 +43,19 @@ const App = () => {
   };
 
 
-
+  //get input value
   const handleChange = (e) => {
     const value = e.target.value;
     setdepartmentName({ ...departmentName, name: value });
   }
+  //delete department 
   const handleRemove = (DepId) => {
-    console.log(DepId)
+
     DepartmentService.removeDepartment(DepId).then(() => {
-      console.log("Complete Delete")
+
       DepartmentService.getDepartments()
         .then(res => {
           setDepartments(res.data);
-          console.log("Complete Delete")
         })
         .catch(err => {
           console.log(err);
@@ -71,45 +74,80 @@ const App = () => {
     setEditOpen(false)
   }
 
-
+  //update department
   const handleEditOk = () => {
-  }
+    setConfirmLoading(true);
+
+    DepartmentService.updateDepartment(EditDep).then(() => {
+      DepartmentService.getDepartments()
+        .then(res => {
+          setDepartments(res.data);
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }).catch(err => {
+      console.log(err)
+    })
+
+    //update department
+    const updatedUsers = editUsers.map(user => ({
+      ...user,
+      department: EditDep
+    }));
+    const updatePromises = updatedUsers.map(user =>
+      UserService.updateUser(user)
+    );
+
+    Promise.all(updatePromises)
+      .then(() => {
+      })
+      .catch(err => {
+      });
+    setTimeout(() => {
+      setConfirmLoading(false);
+      setOpen(false);
+    }, 2000);
+  };
+
+
+
 
 
   const handleEdit = (DepId) => {
     DepartmentService.getDepartmentById(DepId).then((res) => {
-      setDepartmentEdit(res.data.name)
-      console.log(departmentEdit)
       setEditDep(res.data)
       setEditOpen(true)
     }).catch((err) => {
       console.log(err)
     })
   }
-
-
-  const handleEditDep = (selectedValues) => {
-    const selectedDepartment = UserList.find(department => {
-      return selectedValues.includes(department.name);
-    });
+  const handleDepChange = (e) => {
+    const value = e.target.value;
+    setEditDep({ ...EditDep, name: value });
   }
+  //get selected user in update department
+  const handleEditUser = (selectedUsers) => {
+    const selectedUserList = allUser.filter(user =>
+      selectedUsers.includes(user.name) // Adjust depending on how users are identified
+    );
+    setEditUsers(selectedUserList);
+  };
 
+  //Creat department
   const handleOk = () => {
     setConfirmLoading(true);
-    console.log(departmentName)
     DepartmentService.createDepartment(departmentName)
       .then(res => {
-        console.log(res.data)
         DepartmentService.getDepartments()
           .then(res => {
             setDepartments(res.data);
-            console.log("Department", res.data)
           })
           .catch(err => {
             console.log(err);
           });
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(err);
       });
     setTimeout(() => {
@@ -117,7 +155,6 @@ const App = () => {
       setConfirmLoading(false);
     }, 2000);
   };
-
 
   const handleCancel = () => {
     setOpen(false);
@@ -133,13 +170,15 @@ const App = () => {
       .then(res => {
         const DepartmentList = res.data.filter(dep => dep.delete === false); // Filter users where delete is true
         setDepartments(DepartmentList);
-        console.log("Department", res.data)
+
       })
       .catch(err => {
         console.log(err);
       });
     UserService.getUsers()
       .then(res => {
+        console.log(res.data)
+        setAlluser(res.data)
         const usersToDelete = res.data.filter(user => user.delete === false).map((user) => {
           return {
             label: user.name,
@@ -248,6 +287,7 @@ const App = () => {
               ))
             }
           </Row>
+          
           <Modal
             title="Edit Department"
             open={editOpen}
@@ -257,7 +297,7 @@ const App = () => {
           >
             <Form name="validateOnly" layout="vertical" autoComplete="off">
               <Form.Item
-                name="name"
+                name="departmentName"
                 label="Department Name"
                 rules={[
                   {
@@ -265,7 +305,7 @@ const App = () => {
                   },
                 ]}
               >
-                <Input defaultValue="Hello" value={departmentEdit.departmentName} onChange={(e) => handleChange(e)} />
+                <Input onChange={(e) => handleDepChange(e)} />
               </Form.Item>
               <Form.Item
                 name="Users"
@@ -290,9 +330,8 @@ const App = () => {
                       width: '100%',
                     }}
                     placeholder="Please select"
-                    onChange={handleEditDep}
+                    onChange={handleEditUser}
                     options={users}
-
 
                   />
                 </Space>
@@ -311,4 +350,4 @@ const App = () => {
     </Layout >
   );
 };
-export default App;
+export default Home;

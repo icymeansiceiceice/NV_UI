@@ -73,10 +73,6 @@ export default function Login() {
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    &nbsp;
-                    Or
-                    &nbsp;
-                    <a href="">register</a>
                 </Form.Item>
             </Form>
         </div>

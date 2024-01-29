@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { Layout, theme, Avatar, Button, Table, Tag, Space, Modal, Form, Input, Select } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './link.css';
-import UserService from './services/UserService';
-import DepartmentService from './services/DepartmentService';
+import UserService from '../services/UserService';
+import DepartmentService from '../services/DepartmentService';
 const { Header, Content, Footer, Sider } = Layout;
 
 const UserList = () => {
 
   const [loginUser, setloginUser] = useState({});
-  const [editUser, setEditUser] = useState({});
+  const [editUser, setEditUser] = useState([]);
   const columns = [
     {
       title: 'UserID',
@@ -156,6 +156,7 @@ const UserList = () => {
 
   const handleEditOk = () => {
     setConfirmLoading(true);
+    console.log("Edit user")
     console.log(editUser)
     UserService.updateUser(editUser).then((res) => {
       console.log(res)
@@ -206,8 +207,7 @@ const UserList = () => {
     const selectedDepartment = departmentList.find(department => {
       return selectedValues.includes(department.name);
     });
-
-    setCreateUser(prevState => ({
+    setEditUser(prevState => ({
       ...prevState,
       department: selectedDepartment || {}
     }));
