@@ -1,19 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateDepartment() {
 
     let navigator = useNavigate();
-    const [department,setDepartment] = useState({
-        name:'',
-        user:[]
+    const [department, setDepartment] = useState({
+        name: '',
+        user: []
     });
 
-    const handleChange = (e)=>{
+    const handleChange = (e) => {
         const value = e.target.value;
-        setDepartment({...department,[e.target.name]:value})
+        setDepartment({ ...department, [e.target.name]: value })
     }
-    
-    const handleSubmit = (e)=>{
+
+    const handleSubmit = (e) => {
         e.preventDefault();
 
     }
@@ -21,22 +22,22 @@ export default function CreateDepartment() {
     return (
         <div>
             <form action="" onSubmit={handleSubmit}>
-               <div>
+                <div>
                     <h1>Log In</h1>
-                </div> 
+                </div>
                 <div>
                     <label htmlFor="">name</label>
-                    <input type="text" name="name" value={department.name} onChange={(e)=> handleChange(e)} />
+                    <input type="text" name="name" value={department.name} onChange={(e) => handleChange(e)} />
                 </div>
                 <div>
                     <label htmlFor="">password</label>
-                    <input type="password" name="password" value={department.password} onChange={(e)=> handleChange(e)} />
+                    <input type="password" name="password" value={department.password} onChange={(e) => handleChange(e)} />
                 </div>
                 <div>
                     <button>login</button>
                 </div>
                 <a href="">register</a>
             </form>
-          </div> 
-  )
+        </div>
+    )
 }

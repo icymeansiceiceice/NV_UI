@@ -1,0 +1,20 @@
+/* styles.css */
+.link {
+  color: #ffffffa3;
+  text-decoration: none;
+  display: block;
+  margin: 0 8px 10px;
+  border-radius: 9px;
+  padding: 7px 10px;
+  text-align: center;
+}
+
+.activeLink {
+  color: #fff;
+  background-color: #1677FF;
+  border: 1px solid #1677FF;
+}
+
+body {
+  margin: 0;
+}
